@@ -16,27 +16,22 @@
 */
 package storage;
 
-import static configuration.Log.EXCEPTION_LOGGER;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Level;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import configuration.Constants;
+import experiments.MediatorScript_PiP_Session1;
 import model.Environment;
 import model.ExtractionResultCollection;
 import model.Part;
 import utility.FileUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
 
-import configuration.Constants;
+import static configuration.Log.EXCEPTION_LOGGER;
 
 /**
  * Class to start Elasticsearch queries. Can be replaced by another storage
@@ -51,9 +46,11 @@ public class FileStorageInterface extends GeneralStorage {
 	// maps to last used file part (profile UUID+ file UUID) tp file number
 	private final Map<String, Integer> lastFile = new HashMap<String, Integer>();
 
-	
+	private final MediatorScript_PiP_Session1 mediatorScritp;
+
 	public FileStorageInterface() {
 		initPathToId();
+		mediatorScritp = new MediatorScript_PiP_Session1();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -88,6 +85,7 @@ public class FileStorageInterface extends GeneralStorage {
 	@Override
 	public void save(String collection, String profileUUID, String type,
 			String path) {
+		mediatorScritp.receivePETdata(collection);
 		File out = new File(Constants.OUTPUT_DIRECTORY, profileUUID);
 		FileUtils.createDirectory(out.toPath());
 		if (path == null) {
