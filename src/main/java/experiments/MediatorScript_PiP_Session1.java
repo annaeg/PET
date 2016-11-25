@@ -1,21 +1,25 @@
 package experiments;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import entities.*;
+import model.ExtractionResult;
+import model.KeyValueResult;
+import model.Part;
 import models.CoreModel;
 import relations.DEMRelation;
 import relations.RelationBuilder;
+
+import java.io.IOException;
 
 /**
  * This will be the Mediator Script of the PERICLES in Practice Session.
  */
 public class MediatorScript_PiP_Session1 extends Experiment {
 
-
     public MediatorScript_PiP_Session1() {
         super("MediatorScript_PiP_Session1");
         createScenarioTemplate();
-//        receivePETdata();
-        sendToERMR();
     }
 
     ////////// TEMPLATE //////////// >>>
@@ -35,7 +39,7 @@ public class MediatorScript_PiP_Session1 extends Experiment {
         webUpload.isUsedBy(artists);
     }
 
-    private HumanAgent createArtist(String name){
+    private HumanAgent createArtist(String name) {
         HumanAgent artist = new HumanAgent(scenario, name);
         artist.isMemberOf(artists);
         return artist;
@@ -45,7 +49,7 @@ public class MediatorScript_PiP_Session1 extends Experiment {
     //    file_type :regularFile
     //    file_size :153224
     //    file_owner :anna
-    private DigitalObject createArtwork(String name, String last, String type, String size, HumanAgent artist){
+    private DigitalObject createArtwork(String name, String last, String type, String size, HumanAgent artist) {
         DigitalObject artwork = new DigitalObject(scenario, name);
         artwork.addProperty(lastModified, last);
         artwork.addProperty(fileType, type);
@@ -58,49 +62,28 @@ public class MediatorScript_PiP_Session1 extends Experiment {
     ////////// INFORMATION GATHERING //////////// >>>
 
     public void receivePETdata(String collection) {
-        System.out.println("CALL");
-        System.out.println(collection);
-        // TODO: What we want is:
-        // "extractionResults", "results" : "last_modified" ,  "file_size" ,  "file_type" , "file_owner"
-        // and
-        // "fileName"
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.enable(SerializationFeature.CLOSE_CLOSEABLE);
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
+        try {
+            Part part = mapper.readValue(collection, Part.class);
+            System.out.println(part.fileName);
+            for (ExtractionResult result : part.extractionResults) {
+                if (result.moduleName.equals("Posix file information monitoring")) {
+                    KeyValueResult kvResult = (KeyValueResult) result.results;
+                    System.out.println(kvResult.results.get("last_modified"));
+                    System.out.println(kvResult.results.get("file_size"));
+                    System.out.println(kvResult.results.get("file_type"));
+                    System.out.println(kvResult.results.get("file_owner"));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    // TODO: What about the events?
     }
-
-// TODO: What about the events?
-
-// TODO: This is the format of the collection:
-
-//    {
-//        "class" : "model.Part",
-//            "extractionResults" : [ {
-//        "moduleName" : "Posix file information monitoring",
-//                "moduleDisplayName" : "Posix file information monitoring",
-//                "moduleVersion" : "0.1",
-//                "moduleClass" : "modules.PosixModule",
-//                "extractionDate" : "2016-11-22T07:50:33.067+0000",
-//                "configurationHash" : "fdded7ff785540a258879766139f2bcf",
-//                "results" : {
-//            "model.KeyValueResult" : {
-//                "results" : {
-//                    "last_modified" : "2016-11-18T11:54:53Z",
-//                            "last_access" : "2016-11-21T15:31:27Z",
-//                            "creation_time" : "2016-11-18T11:54:53Z",
-//                            "file_type" : "regularFile",
-//                            "file_size" : "79986",
-//                            "file_key" : "(dev=803,ino=1847091)",
-//                            "file_group_owner" : "anna",
-//                            "file_owner" : "anna"
-//                },
-//                "name" : "PosixResults"
-//            }
-//        }
-//    } ],
-//        "fileName" : "eumetsat (copy 1).png",
-//            "petVersion" : "0.5",
-//            "profileUUID" : "6cd6efd8-d70b-4c1e-8973-3a6066390039"
-//    }
-
 
     private void sendToERMR() {
         // TODO:
