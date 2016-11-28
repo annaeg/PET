@@ -1,0 +1,20 @@
+{
+  "class" : "modules.configuration.DirectoryMonitorModuleConfig",
+  "moduleName" : "Directory Monitor Module",
+  "moduleDisplayName" : "Directory Monitor Module",
+  "moduleVersion" : "1.0",
+  "enabled" : true,
+  "recordEvents" : true,
+  "supportedSystems" : [ "SYSTEM_INDEPENDENT" ],
+  "fileFilter" : {
+    "fileExtensionFilter" : null,
+    "inclusiveMimeType" : [ ],
+    "inclusiveMediaType" : [ ],
+    "exclusiveMediaType" : [ ],
+    "exclusiveMimeType" : [ ]
+  },
+  "eventAddToProfile" : "PERICLESinPractice",
+  "monitoredFolderPath" : "/home/anna/Desktop/petTest",
+  "isRecursive" : true,
+  "monitorDelete" : true
+}

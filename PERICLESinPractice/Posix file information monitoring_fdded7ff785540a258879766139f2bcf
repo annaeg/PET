@@ -1,0 +1,17 @@
+{
+  "class" : "configuration.ModuleConfiguration",
+  "moduleName" : "Posix file information monitoring",
+  "moduleDisplayName" : "Posix file information monitoring",
+  "moduleVersion" : "0.1",
+  "enabled" : true,
+  "recordEvents" : false,
+  "supportedSystems" : [ "LINUX", "OS_X", "BSD", "SOLARIS" ],
+  "fileFilter" : {
+    "fileExtensionFilter" : null,
+    "inclusiveMimeType" : [ ],
+    "inclusiveMediaType" : [ ],
+    "exclusiveMediaType" : [ ],
+    "exclusiveMimeType" : [ ]
+  },
+  "eventAddToProfile" : null
+}
