@@ -46,11 +46,11 @@ public class FileStorageInterface extends GeneralStorage {
 	// maps to last used file part (profile UUID+ file UUID) tp file number
 	private final Map<String, Integer> lastFile = new HashMap<String, Integer>();
 
-	private final MediatorScript_PiP_Session1 mediatorScritp;
+	private final MediatorScript_PiP_Session1 mediatorScript;
 
 	public FileStorageInterface() {
 		initPathToId();
-		mediatorScritp = new MediatorScript_PiP_Session1();
+		mediatorScript = new MediatorScript_PiP_Session1();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -85,7 +85,7 @@ public class FileStorageInterface extends GeneralStorage {
 	@Override
 	public void save(String collection, String profileUUID, String type,
 			String path) {
-		mediatorScritp.receivePETdata(collection);
+		mediatorScript.receivePETData(collection);
 		File out = new File(Constants.OUTPUT_DIRECTORY, profileUUID);
 		FileUtils.createDirectory(out.toPath());
 		if (path == null) {
