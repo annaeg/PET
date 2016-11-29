@@ -42,7 +42,7 @@ public class ERMRConnection {
         try {
             sendScenarioModel(turtleFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("[ERROR] Couln't send model to ERMR. Network is unreachable.");
         }
     }
 
@@ -112,8 +112,7 @@ public class ERMRConnection {
             exists = repositoryList.contains(pattern);
             response.close();
             connection.disconnect();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             return false;
         }
         return exists;

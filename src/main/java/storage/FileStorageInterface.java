@@ -85,7 +85,7 @@ public class FileStorageInterface extends GeneralStorage {
 	@Override
 	public void save(String collection, String profileUUID, String type,
 			String path) {
-		mediatorScript.receivePETData(collection);
+		mediatorScript.receivePETInformation(collection);
 		File out = new File(Constants.OUTPUT_DIRECTORY, profileUUID);
 		FileUtils.createDirectory(out.toPath());
 		if (path == null) {
